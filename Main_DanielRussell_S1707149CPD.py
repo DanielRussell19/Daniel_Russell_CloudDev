@@ -86,15 +86,9 @@ try:
         c.upload_file(x, bucket, 'Audio' + str(i))
         print('Audio' + str(i) + ' :Uploaded')
         
-        res = q.send_message(QueueUrl= sqsurl, MessageBody= 'AudioFileUploaded', DelaySeconds= 30,
-        MessageAttributes={
-        'AudioName': {
-            'StringValue': 'Audio' + str(i),
-            'DataType': 'String'
-            },
-        })
-        print('Audio' + str(i) + ' :SQS Sent for Lambda Trigger, 30sec wait before next loop')
-        time.sleep(30)
+        res = q.send_message(QueueUrl= sqsurl, MessageBody= 'Audio' + str(i), DelaySeconds= 30)
+        print('Audio' + str(i) + ' :SQS Sent for Lambda Trigger')
+        #time.sleep(30)
         
         i = i + 1
     
