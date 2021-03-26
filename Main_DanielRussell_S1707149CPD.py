@@ -1,5 +1,6 @@
 ## Daniel Russell S1707149 CPD
 import boto3
+import time
 
 ##Variables
 bucket = 'bucket-s1707149'
@@ -8,6 +9,8 @@ stack = 'stack-s1707149'
 
 templatedir = './Templates/DynamoDB_S1707149CPD.template'
 audiodirs = ['./Files/Audio1.mp3', './Files/Audio2.mp3', './Files/Audio3.mp3', './Files/Audio4.mp3', './Files/Audio5.mp3']
+
+sqsurl = 'https://sqs.eu-west-2.amazonaws.com/335830697146/que-s1707149'
 
 ##Create S3 From Boto3
 try:
@@ -43,8 +46,8 @@ try:
 except Exception as e:
     ##if error attempts to create the queue
     q = c.create_queue(QueueName= sqs, Attributes={'DelaySeconds': '30'})
-    print("Error: SQS Created")
     print(e)
+    print("SQS Created")
     
 except Exception as e:
     print("Error: SQS ERROR")
@@ -73,17 +76,30 @@ except Exception as e:
    print("Error: Cloud Formation")
    print(e)
 
-##Upload audiofiles in 30sec intervals to S3 Bucket??
+##Upload audiofiles in 30sec intervals to S3 Bucket
 try:
     c = boto3.client('s3')
-    q = boto3.resource('sqs')
+    q = boto3.client('sqs')
     i = 1
 
     for x in audiodirs:
-        print('Audio' + str(i))
-        #c.upload_file(x, bucket, 'Audio' + str(i))
+        c.upload_file(x, bucket, 'Audio' + str(i))
+        print('Audio' + str(i) + ' :Uploaded')
+        
+        res = q.send_message(QueueUrl= sqsurl, MessageBody= 'AudioFileUploaded', DelaySeconds= 30,
+        MessageAttributes={
+        'AudioName': {
+            'StringValue': 'Audio' + str(i),
+            'DataType': 'String'
+            },
+        })
+        print('Audio' + str(i) + ' :SQS Sent for Lambda Trigger, 30sec wait before next loop')
+        time.sleep(30)
+        
         i = i + 1
     
 except Exception as e:
     print("Error: Audio File Upload")
     print(e)
+    
+print("End of execution.")
