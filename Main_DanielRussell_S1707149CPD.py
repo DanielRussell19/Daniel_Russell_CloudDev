@@ -10,7 +10,7 @@ stack = 'stack-s1707149'
 templatedir = './Templates/DynamoDB_S1707149CPD.template'
 audiodirs = ['./Files/Audio1.mp3', './Files/Audio2.mp3', './Files/Audio3.mp3', './Files/Audio4.mp3', './Files/Audio5.mp3']
 
-#Shortened dirs for debugging
+#Shortened dir for debugging purposes
 #audiodirs = ['./Files/Audio1.mp3']
 
 sqsurl = 'https://sqs.eu-west-2.amazonaws.com/335830697146/que-s1707149'

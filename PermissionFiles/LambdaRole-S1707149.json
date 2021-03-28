@@ -1,0 +1,38 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "VisualEditor0",
+            "Effect": "Allow",
+            "Action": [
+                "sqs:DeleteMessage",
+                "s3:PutObject",
+                "s3:GetObject",
+                "s3:GetObjectTorrent",
+                "dynamodb:PutItem",
+                "lambda:InvokeFunction",
+                "sqs:ReceiveMessage",
+                "sqs:GetQueueAttributes"
+            ],
+            "Resource": [
+                "arn:aws:s3:::bucket-s1707149/*",
+                "arn:aws:lambda:eu-west-2:335830697146:function:Lambda-S1707149",
+                "arn:aws:sqs:eu-west-2:335830697146:que-s1707149",
+                "arn:aws:dynamodb:eu-west-2:335830697146:table/Table-S1707149"
+            ]
+        },
+        {
+            "Sid": "VisualEditor1",
+            "Effect": "Allow",
+            "Action": [
+                "transcribe:GetTranscriptionJob",
+                "comprehend:DetectSentiment",
+                "sns:Publish",
+                "s3:ListAllMyBuckets",
+                "transcribe:StartTranscriptionJob",
+                "transcribe:ListTranscriptionJobs"
+            ],
+            "Resource": "*"
+        }
+    ]
+}
