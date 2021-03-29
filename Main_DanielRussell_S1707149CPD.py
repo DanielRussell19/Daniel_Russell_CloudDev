@@ -91,7 +91,7 @@ try:
         
         res = q.send_message(QueueUrl= sqsurl, MessageBody= 'Audio' + str(i), DelaySeconds= 30)
         print('Audio' + str(i) + ' :SQS Sent for Lambda Trigger')
-        time.sleep(10)
+        time.sleep(15)
         i = i + 1
     
 except Exception as e:

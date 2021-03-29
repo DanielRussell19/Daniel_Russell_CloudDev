@@ -7,7 +7,7 @@ import time
 import urllib.request
 
 ##Global Variables
-number = '+4407903899757'
+number = '+44XXXXXXXXXXX'
 bucket = 'bucket-s1707149'
 table = 'Table-S1707149'
 
@@ -17,6 +17,7 @@ def sms(fname, scoring, result):
         ##sends message correcting negative sentiment via sms text message
         c = boto3.client('sns')
         c.publish(PhoneNumber = number, Message='Stop being so negative. ' + fname + ' ' + scoring + ' ' + result)
+        print("SMS Sent! " + fname)
     except Exception as e:
         print("SNS Function Failed " + fname)
         print(e)
@@ -28,6 +29,7 @@ def dynamo(fname, scoring):
         ##puts the audio name and scoring into dynamodb
         c = boto3.client('dynamodb')
         c.put_item(TableName= table, Item= { 'AudioName': {'S': fname}, 'AudioScoring': {'S': scoring} })
+        print("Item added: " + fname)
     except Exception as e:
         print("Table Function Failed " + fname)
         print(e)
@@ -40,6 +42,7 @@ def comprehend(result):
         ##the resulting senitment is returned
         c = boto3.client('comprehend')
         res = c.detect_sentiment(Text= result,LanguageCode='en')['Sentiment']
+        print("Comprehend: " + result)
         return res
         
     except Exception as e:
